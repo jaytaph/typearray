@@ -31,7 +31,7 @@ jobs:
       run: |
         composer self-update
         COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
-        composer suggests | xargs -i composer require {}
+        composer suggests --list | xargs -i composer require {}
     - name: Execute tests (Unit and Feature)
       run: vendor/bin/phpunit --coverage-text
     - name: Static analysis with PHPStan
