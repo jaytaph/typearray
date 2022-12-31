@@ -92,6 +92,6 @@ class TypeArrayType extends Type
             __METHOD__,
         );
 
-        return ! $platform->hasNativeJsonType();
+        return true;
     }
 }
