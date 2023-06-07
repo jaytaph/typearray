@@ -21,7 +21,7 @@ class TypeArrayTest extends TestCase
         $this->assertEquals('def', $typeArray->getString('[level0.4][not-exists]', 'def'));
         $this->assertEquals('bar', $typeArray->getString('[level0.4][level1.1]', 'def'));
 
-        $a = new TypeArray(['level2.1' => 'baz', 'level2.2' => 2, 'level2.3' => true, 'level2.5' => null]);
+        $a = new TypeArray(['level2.1' => 'baz', 'level2.2' => 2, 'level2.3' => true, 'level2.5' => null, 'level2.6' => 1.5335]);
         $b = new TypeArray(['foo', 'bar']);
         $this->assertEquals($a, $typeArray->getTypeArray('[level0.4][not-exists]', $a));
         $this->assertEquals($a, $typeArray->getTypeArray('[level0.4][level1.4]', $b));
@@ -162,6 +162,26 @@ class TypeArrayTest extends TestCase
         $typeArray->getIntOrNull('[level0.1]');
     }
 
+    public function testGetFloat(): void
+    {
+        $typeArray = $this->createTypeArray();
+
+        $this->assertIsFloat($typeArray->getFloat('[level0.4][level1.4][level2.6]'));
+        $this->assertEquals(1.5335, $typeArray->getFloat('[level0.4][level1.4][level2.6]'));
+
+        $this->assertNull($typeArray->getFloatOrNull('[doesNotExist]'));
+        $this->assertNotNull($typeArray->getFloatOrNull('[level0.4][level1.4][level2.6]'));
+    }
+
+
+    public function testFloatException(): void
+    {
+        $typeArray = $this->createTypeArray();
+
+        $this->expectException(IncorrectDataTypeException::class);
+        $typeArray->getFloat('[level0.4][level1.1]');
+    }
+
     public function testBoolException(): void
     {
         $typeArray = $this->createTypeArray();
@@ -205,6 +225,7 @@ class TypeArrayTest extends TestCase
                     'level2.2' => 2,
                     'level2.3' => true,
                     'level2.5' => null,
+                    'level2.6' => 1.5335,
                 ],
                 'level1.5' => null,
             ],

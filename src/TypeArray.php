@@ -146,6 +146,32 @@ class TypeArray implements \JsonSerializable
         return new TypeArray($value ?? []);
     }
 
+    // Returns float from given path
+    public function getFloat(string $path, ?float $default = null): float
+    {
+        $value = $this->getValue($path, $default);
+        if (!is_float($value)) {
+            throw new IncorrectDataTypeException('float', gettype($value));
+        }
+
+        return $value;
+    }
+
+    // Returns float on given path, or null when not found
+    public function getFloatOrNull(string $path): ?float
+    {
+        if (!$this->propertyAccessor->isReadable($this->data, $path)) {
+            return null;
+        }
+
+        $value = $this->propertyAccessor->getValue($this->data, $path);
+        if (!is_float($value) && !is_null($value)) {
+            throw new IncorrectDataTypeException('float', gettype($value));
+        }
+
+        return $value;
+    }
+
     // Returns true when the given path is an array or TypeArray
     public function isTypeArray(string $path): bool
     {
