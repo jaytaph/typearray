@@ -173,7 +173,6 @@ class TypeArrayTest extends TestCase
         $this->assertNotNull($typeArray->getFloatOrNull('[level0.4][level1.4][level2.6]'));
     }
 
-
     public function testFloatException(): void
     {
         $typeArray = $this->createTypeArray();
@@ -208,6 +207,25 @@ class TypeArrayTest extends TestCase
 
         $this->expectException(\JsonException::class);
         TypeArray::fromJson('aap');
+    }
+
+    public function testIterable(): void
+    {
+        $typeArray = $this->createTypeArray();
+
+        $retKeys = [];
+        $retVals = [];
+        foreach ($typeArray->getIterable('[level0.4]') as $key => $value) {
+            $retKeys[] = $key;
+            $retVals[] = $value;
+        }
+
+        $this->assertEquals(['level1.1', 'level1.2', 'level1.3', 'level1.4', 'level1.5'], $retKeys);
+
+        $this->assertEquals('bar', $retVals[0]);
+        $this->assertEquals(1, $retVals[1]);
+        $this->assertEquals(false, $retVals[2]);
+        $this->assertIsArray($retVals[3]);
     }
 
     protected function createTypeArray(): TypeArray

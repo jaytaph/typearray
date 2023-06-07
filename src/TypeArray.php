@@ -230,4 +230,16 @@ class TypeArray implements \JsonSerializable
     {
         return $this->data;
     }
+
+    public function getIterable(string $path): iterable
+    {
+        $data = $this->propertyAccessor->getValue($this->data, $path);
+        if (!is_array($data)) {
+            throw new IncorrectDataTypeException('iterable', 'Data is not iterable');
+        }
+
+        foreach ($data as $key => $value) {
+            yield $key => $value;
+        }
+    }
 }
