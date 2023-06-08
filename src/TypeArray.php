@@ -239,6 +239,11 @@ class TypeArray implements \JsonSerializable
         }
 
         foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                yield $key => new TypeArray($value);
+                continue;
+            }
+
             yield $key => $value;
         }
     }
